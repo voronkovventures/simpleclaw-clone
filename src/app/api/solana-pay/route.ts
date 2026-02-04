@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { encodeURL } from "@solana/pay";
+import BigNumber from "bignumber.js";
 import { PublicKey, Keypair } from "@solana/web3.js";
 
 export const runtime = "nodejs";
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
   const reference = new PublicKey(
     process.env.SOLANA_PAY_REFERENCE || Keypair.generate().publicKey
   );
-  const amount = Number(amountRaw ?? 10);
+  const amount = new BigNumber(amountRaw ?? 10);
 
   const url = encodeURL({
     recipient: new PublicKey(recipient),
