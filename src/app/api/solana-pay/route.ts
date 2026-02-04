@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { encodeURL, findReference } from "@solana/pay";
-import { PublicKey } from "@solana/web3.js";
+import { encodeURL } from "@solana/pay";
+import { PublicKey, Keypair } from "@solana/web3.js";
 
 // ENV required: SOLANA_PAY_RECIPIENT, SOLANA_PAY_LABEL, SOLANA_PAY_MESSAGE, SOLANA_PAY_USDC_MINT
 
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing env config" }, { status: 500 });
   }
 
-  const reference = new PublicKey(process.env.SOLANA_PAY_REFERENCE || PublicKey.unique().toBase58());
+  const reference = new PublicKey(process.env.SOLANA_PAY_REFERENCE || Keypair.generate().publicKey);
   const url = encodeURL({
     recipient: new PublicKey(recipient),
     amount: Number(amount || 10),
